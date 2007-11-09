@@ -194,7 +194,7 @@ class OpenIDAuthenticator extends Authenticator {
 	 * @return string Returns the name of the authentication method.
 	 */
 	public static function get_name() {
-		return "OpenID/i-name";
+		return "OpenID";
 	}
 }
 
