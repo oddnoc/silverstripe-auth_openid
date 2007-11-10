@@ -7,7 +7,6 @@ global $lang;
 if(!isset($lang['zh_CN'])) $lang['zh_CN'] = $lang['en_US'];
 
 $lang['zh_CN']['Security']['OPENIDHEADER'] = '开放系统身份（OpenID）/i-name登录信息';
-$lang['zh_CN']['Security']['OPENIDDESC'] = '<p>请确认您在此输入您标准化的开放系统身份（OpenID）/i-name登录信息，亦即,带有协议及尾随斜杠（例如，http://openid.silverstripe.com/）。</p>';
 $lang['zh_CN']['Security']['OPENIDURL'] = '开放系统身份（OpenID）的URL/i-name';
 $lang['zh_CN']['Security']['MEMBERALREADYEXISTS'] = '已有会员占用了此身份认证URL';
 $lang['zh_CN']['OpenIDAuthenticator']['ERRORCRED'] = '请输入您的开放系统身份（OpenID）或您的i-name';

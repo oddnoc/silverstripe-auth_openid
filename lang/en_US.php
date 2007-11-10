@@ -3,8 +3,6 @@
 global $lang;
 
 $lang['en_US']['Security']['OPENIDHEADER'] = 'OpenID/i-name credentials';
-$lang['en_US']['Security']['OPENIDDESC'] = '<p>Make sure you enter your normalized OpenID/i-name credentials 
-				here, i.e. with protocol and trailing slash for OpenID (e.g. http://openid.silverstripe.com/).</p>';
 $lang['en_US']['Security']['OPENIDURL'] = 'OpenID URL/i-name';
 $lang['en_US']['Security']['MEMBERALREADYEXISTS'] = 'There already exists a member with this identity URL';
 $lang['en_US']['OpenIDAuthenticator']['ERRORCRED'] = 'Please enter your OpenID URL or your i-name.';

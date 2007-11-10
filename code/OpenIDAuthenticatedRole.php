@@ -70,12 +70,11 @@ class OpenIDAuthenticatedRole extends DataObjectDecorator {
 		);
 		$fields->push(
 			new LiteralField("OpenIDDescription",
-				_t('Security.OPENIDDESC',"<p>Make sure you enter your normalized OpenID/i-name credentials 
-				here, i.e. with protocol and trailing slash for OpenID (e.g. http://openid.silverstripe.com/).</p>")
+				_t('OpenIDLoginForm.DESC')
 			)
 		);
 		$fields->push(
-			new TextField("IdentityURL", _t('Security.OPENIDURL', "OpenID URL/i-name")),
+			new TextField("IdentityURL", _t('Security.OPENIDURL', "OpenID URL/i-name (e.g. http://openid.silverstripe.com/)")),
 			"IdentityURL"
 		);
 	}
