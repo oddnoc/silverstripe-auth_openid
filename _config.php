@@ -1,11 +1,6 @@
 <?php
 
 /**
- * Register the {@link OpenIDAuthenticator OpenID authenticator}
- */
-Authenticator::register_authenticator('OpenIDAuthenticator');
-
-/**
  * Define the random number generator for the OpenID library
  *
  * To set a source of randomness, define {@link Auth_OpenID_RAND_SOURCE}
@@ -18,5 +13,10 @@ Authenticator::register_authenticator('OpenIDAuthenticator');
  * "/dev/urandom".
  */
 define('Auth_OpenID_RAND_SOURCE', null);
+
+/**
+ * Register the {@link OpenIDAuthenticator OpenID authenticator}
+ */
+Authenticator::register_authenticator('OpenIDAuthenticator');
 
 ?>
