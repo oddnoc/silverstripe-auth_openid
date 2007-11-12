@@ -4,7 +4,7 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-if(!isset($lang['fr_FR'])) $lang['fr_FR'] = $lang['en_US'];
+$lang['fr_FR'] = $lang['en_US'];
 
 $lang['fr_FR']['OpenIDAuthenticator']['LOGINFAILED'] = 'Connection échouée. Essayez encore s\'il vous plaît.';
 $lang['fr_FR']['OpenIDAuthenticator']['VERIFICATIONCANCELLED'] = 'La vérification a été annulée. Essayez encore s\'il vous plaît.';

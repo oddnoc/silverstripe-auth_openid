@@ -1,12 +1,13 @@
 <?php
 
-i18n::include_locale_file('sapphire', 'en_US');
+i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
 $lang['de_DE'] = $lang['en_US'];
 
 $lang['de_DE']['Security']['OPENIDHEADER'] = 'OpenID/i-name Beglaubigung';
+$lang['de_DE']['Security']['OPENIDDESC'] = '<p> Stellen Sie sicher, dass Sie die normierte OpenID/i-name eingegeben haben, z.B. mit Protokoll und abschliessenem Slash für OpenID (Beispiel: http://openid.silverstripe.com/ ). <p>';
 $lang['de_DE']['Security']['OPENIDURL'] = 'OpenID URL/i-name';
 $lang['de_DE']['Security']['MEMBERALREADYEXISTS'] = 'Es gibt bereits ein Mitglied mit dieser Identifizierungs-URL';
 $lang['de_DE']['OpenIDAuthenticator']['ERRORCRED'] = 'Bitte geben Sie ihre OpenID URL oder ihren i-name ein.';

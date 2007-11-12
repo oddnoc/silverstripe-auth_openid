@@ -1,8 +1,13 @@
 <?php
 
+i18n::include_locale_file('auth_openid', 'en_US');
+
 global $lang;
 
+$lang['nl_NL'] = $lang['en_US'];
+
 $lang['nl_NL']['Security']['OPENIDHEADER'] = 'OpenID/i-name gegevens';
+$lang['nl_NL']['Security']['OPENIDDESC'] = '<p>Make sure you enter your normalized OpenID/i-name credentials here, i.e. with protocol and trailing slash for OpenID (e.g. http://openid.silverstripe.com/).</p>';
 $lang['nl_NL']['Security']['OPENIDURL'] = 'OpenID URL/i-name';
 $lang['nl_NL']['Security']['MEMBERALREADYEXISTS'] = 'Er bestaat reeds een gebruiker met deze OpenID URL';
 $lang['nl_NL']['OpenIDAuthenticator']['ERRORCRED'] = 'Vul jouw OpenID URL of i-name in.';
