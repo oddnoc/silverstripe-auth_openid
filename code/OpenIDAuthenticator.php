@@ -169,7 +169,9 @@ class OpenIDAuthenticator extends Authenticator {
 				print implode("\n", $page_contents);
 			}
 		}
-
+		
+		Session::save();
+		
 		// Stop the script execution! This method should return only on error
 		exit();
 	}
@@ -210,24 +212,12 @@ class OpenIDAuthenticator extends Authenticator {
  */
 class OpenIDAuthenticator_Controller extends Controller {
 
-	/**
-	 * Run the controller
-	 *
-	 * @param array $requestParams Passed request parameters
-	 */
-	function run($requestParams) {
-		$this->pushCurrent();
-		$this->response = new HTTPResponse();
-
-		parent::init();
-
-		if(isset($_GET['debug_profile']))
+	function index() {
+		if(isset($_GET['debug_profile'])) {
 			Profiler::mark("OpenIDAuthenticator_Controller");
+		}
 
-
-		$consumer = new Auth_OpenID_Consumer(new OpenIDStorage(),
-																				 new SessionWrapper());
-
+		$consumer = new Auth_OpenID_Consumer(new OpenIDStorage(), new SessionWrapper());
 
 		// Complete the authentication process using the server's response.
 		$response = $consumer->complete();
@@ -300,8 +290,6 @@ class OpenIDAuthenticator_Controller extends Controller {
 				}
 			}
 		}
-
-		return $this->response;
 	}
 
 
