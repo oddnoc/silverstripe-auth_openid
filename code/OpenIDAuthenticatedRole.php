@@ -64,19 +64,18 @@ class OpenIDAuthenticatedRole extends DataObjectDecorator {
 	 * to edit the new database fields.
 	 */
 	function updateCMSFields(FieldSet &$fields) {
-		$fields->push(
-			new HeaderField(_t('Security.OPENIDHEADER', "OpenID/i-name credentials")), 
-			"OpenIDHeader"
-		);
-		$fields->push(
-			new LiteralField("OpenIDDescription",
-				_t('OpenIDLoginForm.DESC')
-			)
-		);
-		$fields->push(
-			new TextField("IdentityURL", _t('Security.OPENIDURL', "OpenID URL/i-name (e.g. http://openid.silverstripe.com/)")),
-			"IdentityURL"
-		);
+		$fields->push(new HeaderField(
+			_t('Security.OPENIDHEADER', "OpenID/i-name credentials")),
+			"OpenIDHeader");
+		$fields->push(new LiteralField("OpenIDDescription",
+			_t('Security.OPENIDURLNORMALIZATION',
+				 '<p>Make sure you enter your normalized OpenID/i-name credentials ' .
+				 'here, i.e. with protocol and trailing slash for OpenID (e.g. ' .
+				 'http://openid.silverstripe.com/).</p>')));
+		$fields->push(new TextField("IdentityURL",
+			_t('Security.EDITOPENIDURL',
+				 "OpenID URL/i-name (e.g. http://openid.silverstripe.com/)")),
+			"IdentityURL");
 	}
 
 

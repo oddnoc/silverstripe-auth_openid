@@ -56,7 +56,8 @@ class OpenIDAuthenticator extends Authenticator {
 	 */
 	protected static function on_register() {
 		Object::add_extension('Member', 'OpenIDAuthenticatedRole');
-		Object::add_extension('Member_Validator', 	'OpenIDAuthenticatedRole_Validator');
+		Object::add_extension('Member_Validator',
+													'OpenIDAuthenticatedRole_Validator');
 		return parent::on_register();
 	}
 
@@ -81,8 +82,9 @@ class OpenIDAuthenticator extends Authenticator {
     if(strlen($openid) == 0) {
 			if(!is_null($form)) {
 				$form->sessionMessage(
-					_t('OpenIDAuthenticator.ERRORCRED', "Please enter your OpenID URL or your i-name."),
-					"bad"
+					_t('OpenIDAuthenticator.ERRORCRED',
+						 'Please enter your OpenID URL or your i-name.'),
+					'bad'
 				);
 			}
 			return false;
@@ -116,7 +118,7 @@ class OpenIDAuthenticator extends Authenticator {
 				   "Member.IdentityURL = '$SQL_identity'"))) {
 			if(!is_null($form)) {
 				$form->sessionMessage(
-					_t('OpenIDAuthenticator.ERRORNOTENABLED', 
+					_t('OpenIDAuthenticator.ERRORNOTENABLED',
 						"Either your account is not enabled for " .
 						"OpenID/i-name authentication " .
 						"or the entered identifier is wrong. " .
@@ -137,8 +139,9 @@ class OpenIDAuthenticator extends Authenticator {
 				displayError("Could not redirect to server: " .
 										 $redirect_url->message);
 			} else {
-				Director::redirect($redirect_url);
-				return false;
+				Session::save();
+				header('Location: ' . $redirect_url);
+				exit();
 			}
 
 		} else {
@@ -155,12 +158,13 @@ class OpenIDAuthenticator extends Authenticator {
 			} else {
 				$page_contents = array(
 					 "<html><head><title>",
-					 _t('OpenIDAuthenticator.TRANSACTIONINPROGRESS', "OpenID transaction in progress"),
+					 _t('OpenIDAuthenticator.TRANSACTIONINPROGRESS',
+							'OpenID transaction in progress'),
 					 "</title></head>",
 					 "<body onload='document.getElementById(\"". $form_id .
 					   "\").submit()'>",
 					 $form_html,
-					 _t('OpenIDAuthenticator.TRANSACTIONNOTE', 
+					 _t('OpenIDAuthenticator.TRANSACTIONNOTE',
 						"<p>Click &quot;Continue&quot; to login. You are only seeing " .
 					 	"this because you appear to have JavaScript disabled.</p>"
 					 ),
@@ -169,9 +173,9 @@ class OpenIDAuthenticator extends Authenticator {
 				print implode("\n", $page_contents);
 			}
 		}
-		
+
 		Session::save();
-		
+
 		// Stop the script execution! This method should return only on error
 		exit();
 	}
@@ -196,7 +200,7 @@ class OpenIDAuthenticator extends Authenticator {
 	 * @return string Returns the name of the authentication method.
 	 */
 	public static function get_name() {
-		return "OpenID";
+		return "OpenID/i-name";
 	}
 }
 
@@ -212,19 +216,26 @@ class OpenIDAuthenticator extends Authenticator {
  */
 class OpenIDAuthenticator_Controller extends Controller {
 
-	function index() {
+	/**
+	 * Run the controller (default action)
+	 *
+	 * @param array $requestParams Passed request parameters
+	 */
+	function index($requestParams) {
 		if(isset($_GET['debug_profile'])) {
 			Profiler::mark("OpenIDAuthenticator_Controller");
 		}
 
-		$consumer = new Auth_OpenID_Consumer(new OpenIDStorage(), new SessionWrapper());
+		$consumer = new Auth_OpenID_Consumer(new OpenIDStorage(),
+																				 new SessionWrapper());
 
 		// Complete the authentication process using the server's response.
 		$response = $consumer->complete();
 
 		if($response->status == Auth_OpenID_CANCEL) {
 			Session::set("Security.Message.message",
-				_t('OpenIDAuthenticator.VERIFICATIONCANCELLED', "The verification was cancelled. Please try again."));
+									 _t('OpenIDAuthenticator.VERIFICATIONCANCELLED',
+											'The verification was cancelled. Please try again.'));
 			Session::set("Security.Message.type", "bad");
 
 			if(isset($_GET['debug_profile']))
@@ -234,8 +245,8 @@ class OpenIDAuthenticator_Controller extends Controller {
 
 		} else if($response->status == Auth_OpenID_FAILURE) {
 			Session::set("Security.Message.message", // use $response->message ??
-				_t('OpenIDAuthenticator.AUTHFAILED', "The OpenID/i-name authentication failed.")
-			);
+									 _t('OpenIDAuthenticator.AUTHFAILED',
+											'The OpenID/i-name authentication failed.'));
 			Session::set("Security.Message.type", "bad");
 
 			if(isset($_GET['debug_profile']))
@@ -250,7 +261,6 @@ class OpenIDAuthenticator_Controller extends Controller {
 				$openid = $response->endpoint->canonicalID;
 			}
 
-
 			if(isset($_GET['debug_profile']))
 				Profiler::unmark("OpenIDAuthenticator_Controller");
 
@@ -260,8 +270,7 @@ class OpenIDAuthenticator_Controller extends Controller {
 				   "Member.IdentityURL = '$SQL_identity'")) {
 				$firstname = Convert::raw2xml($member->FirstName);
 				Session::set("Security.Message.message",
-					sprintf(_t('Member.WELCOMEBACK'), $firstname)
-				);
+										 sprintf(_t('Member.WELCOMEBACK'), $firstname));
 				Session::set("Security.Message.type", "good");
 
 				$member->LogIn(
@@ -279,8 +288,8 @@ class OpenIDAuthenticator_Controller extends Controller {
 
 			}	else {
 				Session::set("Security.Message.message",
-					_t('OpenIDAuthenticator.LOGINFAILED', "Login failed. Please try again.")
-				);
+										 _t('OpenIDAuthenticator.LOGINFAILED',
+												'Login failed. Please try again.'));
 				Session::set("Security.Message.type", "bad");
 
 				if($badLoginURL = Session::get("BadLoginURL")) {
