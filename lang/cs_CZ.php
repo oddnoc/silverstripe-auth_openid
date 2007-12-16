@@ -8,7 +8,7 @@ $lang['cs_CZ'] = $lang['en_US'];
 
 $lang['cs_CZ']['OpenIDAuthenticator']['AUTHFAILED'] = 'Ověření OpenID/i-name selhalo.';
 $lang['cs_CZ']['OpenIDAuthenticator']['ERRORCRED'] = 'Prosím zadejte své OpenID URL své i-name.';
-$lang['cs_CZ']['OpenIDAuthenticator']['LOGINFAILED'] = 'Přihlášení selhalo. Prosím zkuste to znouv.';
+$lang['cs_CZ']['OpenIDAuthenticator']['LOGINFAILED'] = 'Přihlášení selhalo. Prosím zkuste to znovu.';
 $lang['cs_CZ']['OpenIDAuthenticator']['TRANSACTIONINPROGRESS'] = 'Probíhá provádění OpenID';
 $lang['cs_CZ']['OpenIDAuthenticator']['VERIFICATIONCANCELLED'] = 'Ověření bylo zrušeno. Prosím zkuste to znovu.';
 $lang['cs_CZ']['OpenIDLoginForm']['DESC'] = '<div id="OpenIDDescription"><p>OpenID je identifikační systém, který Vám umožní registrovat se na několik různých stránek pod jedním účtem. Pro více informací navštivte <a href="http://openid.net">openid.net</a>.</p></div>';
