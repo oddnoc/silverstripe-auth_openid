@@ -4,7 +4,11 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-$lang['tr_TR'] = $lang['en_US'];
+if(array_key_exists('tr_TR', $lang) && is_array($lang['tr_TR'])) {
+	$lang['tr_TR'] = array_merge($lang['en_US'], $lang['tr_TR']);
+} else {
+	$lang['tr_TR'] = $lang['en_US'];
+}
 
 $lang['tr_TR']['OpenIDAuthenticator']['AUTHFAILED'] = 'OpenID/i-name kimlik denetimi başarısız.';
 $lang['tr_TR']['OpenIDAuthenticator']['ERRORCRED'] = 'Lütfen OpenID adresinizi ve ya i-name bilginizi giriniz.';

@@ -4,7 +4,11 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-$lang['cs_CZ'] = $lang['en_US'];
+if(array_key_exists('cs_CZ', $lang) && is_array($lang['cs_CZ'])) {
+	$lang['cs_CZ'] = array_merge($lang['en_US'], $lang['cs_CZ']);
+} else {
+	$lang['cs_CZ'] = $lang['en_US'];
+}
 
 $lang['cs_CZ']['OpenIDAuthenticator']['AUTHFAILED'] = 'Ověření OpenID/i-name selhalo.';
 $lang['cs_CZ']['OpenIDAuthenticator']['ERRORCRED'] = 'Prosím zadejte své OpenID URL své i-name.';

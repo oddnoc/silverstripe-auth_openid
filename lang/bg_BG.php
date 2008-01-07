@@ -4,7 +4,11 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-$lang['bg_BG'] = $lang['en_US'];
+if(array_key_exists('bg_BG', $lang) && is_array($lang['bg_BG'])) {
+	$lang['bg_BG'] = array_merge($lang['en_US'], $lang['bg_BG']);
+} else {
+	$lang['bg_BG'] = $lang['en_US'];
+}
 
 $lang['bg_BG']['OpenIDAuthenticator']['AUTHFAILED'] = 'OpenID/i-name идентификацията неуспешна.';
 $lang['bg_BG']['OpenIDAuthenticator']['ERRORCRED'] = 'Моля въвдете вашият OpenID URL или вашето i-name.';

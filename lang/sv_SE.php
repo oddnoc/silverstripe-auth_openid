@@ -4,7 +4,11 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-$lang['sv_SE'] = $lang['en_US'];
+if(array_key_exists('sv_SE', $lang) && is_array($lang['sv_SE'])) {
+	$lang['sv_SE'] = array_merge($lang['en_US'], $lang['sv_SE']);
+} else {
+	$lang['sv_SE'] = $lang['en_US'];
+}
 
 $lang['sv_SE']['OpenIDAuthenticator']['AUTHFAILED'] = 'OpenID URL/i-name-verifieringen misslyckades.';
 $lang['sv_SE']['OpenIDAuthenticator']['ERRORCRED'] = 'Var god och ange din OpenID-URL eller ditt i-namn.';
