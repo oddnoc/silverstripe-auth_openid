@@ -4,6 +4,7 @@
  * OpenID authentication decorator
  *
  * @author Markus Lanthaler <markus@silverstripe.com>
+ * @package OpenID
  */
 
 

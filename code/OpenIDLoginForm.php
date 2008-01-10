@@ -4,6 +4,7 @@
  * OpenID log-in form
  *
  * @author Markus Lanthaler <markus@silverstripe.com>
+ * @package OpenID
  */
 
 
