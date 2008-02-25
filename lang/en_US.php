@@ -22,11 +22,4 @@ $lang['en_US']['Security']['OPENIDDESC'] = '<p>Make sure you enter your normaliz
 				here, i.e. with protocol and trailing slash for OpenID (e.g. http://openid.silverstripe.com/).</p>';
 $lang['en_US']['Security']['OPENIDHEADER'] = 'OpenID/i-name credentials';
 
-// New2
-
-$lang['en_US']['Security']['EDITOPENIDURL'] = 'OpenID URL/i-name (e.g. http://openid.silverstripe.com/)';
-$lang['en_US']['Security']['OPENIDURLNORMALIZATION'] = '<p>Make sure you enter your normalized OpenID/i-name credentials 
-				here, i.e. with protocol and trailing slash for OpenID (e.g. http://openid.silverstripe.com/).</p>';
-
-
 ?>

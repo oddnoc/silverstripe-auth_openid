@@ -4,7 +4,6 @@
  * OpenID storage class
  *
  * @author Markus Lanthaler <markus@silverstripe.com>
- * @package OpenID
  */
 
 

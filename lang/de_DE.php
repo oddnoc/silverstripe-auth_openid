@@ -4,11 +4,7 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-if(array_key_exists('de_DE', $lang) && is_array($lang['de_DE'])) {
-	$lang['de_DE'] = array_merge($lang['en_US'], $lang['de_DE']);
-} else {
-	$lang['de_DE'] = $lang['en_US'];
-}
+$lang['de_DE'] = $lang['en_US'];
 
 $lang['de_DE']['OpenIDAuthenticator']['AUTHFAILED'] = 'Die OpenID/i-name Authentifizierung ist gescheitert.';
 $lang['de_DE']['OpenIDAuthenticator']['ERRORCRED'] = 'Bitte geben Sie ihre OpenID URL oder ihren i-name ein.';

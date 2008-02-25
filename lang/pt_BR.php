@@ -4,11 +4,7 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-if(array_key_exists('pt_BR', $lang) && is_array($lang['pt_BR'])) {
-	$lang['pt_BR'] = array_merge($lang['en_US'], $lang['pt_BR']);
-} else {
-	$lang['pt_BR'] = $lang['en_US'];
-}
+$lang['pt_BR'] = $lang['en_US'];
 
 $lang['pt_BR']['OpenIDAuthenticator']['AUTHFAILED'] = 'A autenticação do OpenID/i-name falhou.';
 $lang['pt_BR']['OpenIDAuthenticator']['ERRORCRED'] = 'Por favor digite sua URL do OpenID ou seu i-name.';

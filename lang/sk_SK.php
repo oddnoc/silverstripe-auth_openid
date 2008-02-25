@@ -4,11 +4,7 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-if(array_key_exists('sk_SK', $lang) && is_array($lang['sk_SK'])) {
-	$lang['sk_SK'] = array_merge($lang['en_US'], $lang['sk_SK']);
-} else {
-	$lang['sk_SK'] = $lang['en_US'];
-}
+$lang['sk_SK'] = $lang['en_US'];
 
 $lang['sk_SK']['OpenIDAuthenticator']['AUTHFAILED'] = 'OpedID/i-name autentifikácia zlyhala.';
 $lang['sk_SK']['OpenIDAuthenticator']['ERRORCRED'] = 'Prosím zadajte Vaše OpenID URL alebo Vaše i-name.';

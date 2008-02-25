@@ -4,11 +4,7 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-if(array_key_exists('zh_TW', $lang) && is_array($lang['zh_TW'])) {
-	$lang['zh_TW'] = array_merge($lang['en_US'], $lang['zh_TW']);
-} else {
-	$lang['zh_TW'] = $lang['en_US'];
-}
+$lang['zh_TW'] = $lang['en_US'];
 
 $lang['zh_TW']['OpenIDAuthenticator']['AUTHFAILED'] = 'OpenID/i-name 身分驗證失敗。';
 $lang['zh_TW']['OpenIDAuthenticator']['ERRORCRED'] = '請輸入您的OpenID 身分或i-name。';

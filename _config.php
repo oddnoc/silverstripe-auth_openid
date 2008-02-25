@@ -1,11 +1,6 @@
 <?php
 
 /**
- * Configuration file for the auth_openid module.
- * @package OpenID
- */
-
-/**
  * Define the random number generator for the OpenID library
  *
  * To set a source of randomness, define {@link Auth_OpenID_RAND_SOURCE}

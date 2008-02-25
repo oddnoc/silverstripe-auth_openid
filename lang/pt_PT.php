@@ -4,11 +4,7 @@ i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
 
-if(array_key_exists('pt_PT', $lang) && is_array($lang['pt_PT'])) {
-	$lang['pt_PT'] = array_merge($lang['en_US'], $lang['pt_PT']);
-} else {
-	$lang['pt_PT'] = $lang['en_US'];
-}
+$lang['pt_PT'] = $lang['en_US'];
 
 $lang['pt_PT']['OpenIDAuthenticator']['AUTHFAILED'] = 'A autenticação do OpenID/i-name falhou.';
 $lang['pt_PT']['OpenIDAuthenticator']['ERRORCRED'] = 'Por favor ínsira o seu URL OpenID ou o seu i-name.';
@@ -25,12 +21,5 @@ $lang['pt_PT']['Security']['OPENIDDESC'] = '<p>Certifique-se que inseriu aqui as
 				, p.ex. com protocolo e barra para a direita para o OpenID (ex. http://openid.silverstripe.com/).</p>';
 $lang['pt_PT']['Security']['OPENIDHEADER'] = 'Credenciais OpenID/i-name';
 $lang['pt_PT']['Security']['OPENIDURL'] = 'OpenID URL/i-name';
-
-// New2
-
-$lang['pt_PT']['Security']['EDITOPENIDURL'] = 'OpenID URL/i-name (ex. http://openid.silverstripe.com/)';
-$lang['pt_PT']['Security']['OPENIDURLNORMALIZATION'] = '<p>Certifique-se que inseriu aqui as suas credenciais OpenID/i-name normalizadas 
-				, p.ex. com protocolo e barra para a direita para o OpenID (ex. http://openid.silverstripe.com/).</p>';
-
 
 ?>
