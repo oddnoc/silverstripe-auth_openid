@@ -2,6 +2,7 @@
 
 /**
  * Code for using a proxy XRI resolver.
+ * @package OpenID
  */
 
 require_once 'Auth/Yadis/XRDS.php';

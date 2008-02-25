@@ -2,6 +2,7 @@
 
 /**
  * The OpenID and Yadis discovery implementation for OpenID 1.2.
+ * @package OpenID
  */
 
 require_once "Auth/OpenID.php";
