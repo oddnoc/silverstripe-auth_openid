@@ -56,13 +56,17 @@ class OpenIDLoginForm extends LoginForm {
 						_t('OpenIDLoginForm.DESC',
 							'<div id="OpenIDDescription"><p>OpenID is an Internet-wide identity system
 		  					that allows you to sign in to many websites with a single account.
-							For more information visit <a href="http://openid.net">OpenID.net</a>.</p></div>
+							For more information visit <a href="http://openid.net">OpenID.net</a>.</p>
+							<p>If you want to associate your OpenID with your existing account on this website,
+							  simple log in here with your OpenID and follow the instructions.</div>
 						')
 					),
           new HiddenField("AuthenticationMethod", null,
 													$this->authenticator_class, $this),
           new TextField("OpenIDURL", _t('OpenIDLoginForm.URL', "OpenID URL"),
-						Session::get('SessionForms.OpenIDLoginForm.OpenIDURL'), null, $this),
+						Session::get('SessionForms.OpenIDLoginForm.OpenIDURL'),
+						null,
+						$this),
           new CheckboxField("Remember", _t('Member.REMEMBERME'),
 						Session::get('SessionForms.OpenIDLoginForm.Remember'), $this)
         );
@@ -89,7 +93,8 @@ class OpenIDLoginForm extends LoginForm {
     parent::getMessageFromSession();
     if(($member = Member::currentUser()) &&
          !Session::get('OpenIDLoginForm.force_message')) {
-      $this->message = sprintf(_t('Member.LOGGEDINAS'), $member->FirstName);
+      $this->message = sprintf(_t('Member.LOGGEDINAS'),
+															 $member->FirstName);
     }
     Session::set('OpenIDLoginForm.force_message', false);
   }
@@ -109,7 +114,8 @@ class OpenIDLoginForm extends LoginForm {
 		OpenIDAuthenticator::authenticate($data, $this);
 
 		// If the OpenID authenticator returns, an error occured!
-		Session::set('SessionForms.OpenIDLoginForm.OpenIDURL', $data['OpenIDURL']);
+		Session::set('SessionForms.OpenIDLoginForm.OpenIDURL',
+								 $data['OpenIDURL']);
 
 		if(isset($_REQUEST['BackURL']) && $backURL = $_REQUEST['BackURL']) {
 			Session::set('BackURL', $backURL);
@@ -119,7 +125,8 @@ class OpenIDLoginForm extends LoginForm {
 			Director::redirect($badLoginURL);
 		} else {
 			// Show the right tab on failed login
-			Director::redirect(Director::absoluteURL(Security::Link("login")) . '#' . $this->FormName() .'_tab');
+			Director::redirect(Director::absoluteURL(Security::Link("login")) .
+												 '#' . $this->FormName() .'_tab');
 		}
   }
 

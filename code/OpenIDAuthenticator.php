@@ -118,23 +118,6 @@ class OpenIDAuthenticator extends Authenticator {
 			return false;
 		}
 
-		/*$SQL_identity = Convert::raw2sql($auth_request->endpoint->claimed_id);
-		if(!($member = DataObject::get_one("Member",
-				   "Member.IdentityURL = '$SQL_identity'"))) {
-			if(!is_null($form)) {
-				$form->sessionMessage(
-					_t('OpenIDAuthenticator.ERRORNOTENABLED',
-						"Either your account is not enabled for " .
-						"OpenID/i-name authentication " .
-						"or the entered identifier is wrong. " .
-						"Please try again."),
-					"bad"
-				);
-			}
-			return false;
-		}*/
-
-
 		if($auth_request->shouldSendRedirect()) {
 			// For OpenID 1, send a redirect.
 			$redirect_url = $auth_request->redirectURL($trust_root,
@@ -295,10 +278,13 @@ class OpenIDAuthenticator_Controller extends Controller {
 				}
 
 			}	else {
+				$add_openid_url = Director::absoluteURL('OpenIDAuthenticator_Controller/addopenidtoaccount') .
+												    '?OpenID=' . urlencode($openid);
 				Session::set("Security.Message.message",
 										 sprintf(_t('OpenIDAuthenticator.LOGINFAILED',
-																'Login failed (user was "%s" not found)'),
-														 $openid));
+																'This OpenID (%s) is not registered to any account on this website. <a href="%s">Click here to add your OpenID to your account</a>.'),
+														 $openid,
+														 $add_openid_url));
 				Session::set("Security.Message.type", "bad");
 
 				Director::redirect("Security/login");
@@ -320,6 +306,65 @@ class OpenIDAuthenticator_Controller extends Controller {
 								 $type);
 	}
 
+
+	/**
+	 * Show the "add OpenID to account" page
+	 *
+	 * @return string Returns the "add OpenID to account" page as HTML code.
+	 */
+	public function addopenidtoaccount() {
+		$tmpPage = new Page();
+		$tmpPage->Title = _t('OpenIDAuthenticator.ADDOPENIDTOACCOUNTHEADER',
+												 'Add your OpenID to your account');
+		$tmpPage->URLSegment = 'OpenIDAuthenticator_Controller';
+		$controller = new Page_Controller($tmpPage);
+		$controller->init();
+
+		if(!isset($_REQUEST['OpenID']) || (strlen(trim($_REQUEST['OpenID'])) == 0)) {
+			Session::set("Security.Message.message",
+									 _t('OpenIDAuthenticator.NOOPENIDPASSED',
+															'Login with your OpenID to add it to your account.'));
+			Session::set("Security.Message.type", "bad");
+
+			Director::redirect("Security/login");
+			return;
+		}
+
+
+		$customisedController = $controller->customise(array(
+			'Content' =>
+				'<p>' .
+				_t(
+					'OpenIDAuthenticator.NOTEADDOPENIDTOACCOUNT',
+					'Enter your e-mail address and your password to add your OpenID to your account.'
+				) .
+				'</p>',
+			'Form' => $this->AddOpenIDtoAccountForm(),
+		));
+
+		return $customisedController->renderWith("Page");
+	}
+
+
+	/**
+	 * Factory method for the add OpenID to account form
+	 *
+	 * @return Form Returns the add OpenID to account form
+	 */
+	public function AddOpenIDtoAccountForm() {
+		return new AddOpenIDtoAccountForm($this, 'AddOpenIDtoAccountForm');
+	}
+
+
+	/**
+	 * Get a link to a OpenIDAuthenticator_Controller action
+	 *
+	 * @param string $action Name of the action
+	 * @return string Returns the link to the given action
+	 */
+	public static function Link($action = null) {
+		return "OpenIDAuthenticator_Controller/$action";
+	}
 }
 
 
