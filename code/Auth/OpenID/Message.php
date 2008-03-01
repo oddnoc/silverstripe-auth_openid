@@ -42,6 +42,10 @@ define('Auth_OpenID_BARE_NS', 'Bare namespace');
 // return null instead of returning a default.
 define('Auth_OpenID_NO_DEFAULT', 'NO DEFAULT ALLOWED');
 
+// Limit, in bytes, of identity provider and return_to URLs, including
+// response payload.  See OpenID 1.1 specification, Appendix D.
+define('Auth_OpenID_OPENID1_URL_LIMIT', 2047);
+
 // All OpenID protocol fields.  Used to check namespace aliases.
 global $Auth_OpenID_OPENID_PROTOCOL_FIELDS;
 $Auth_OpenID_OPENID_PROTOCOL_FIELDS = array(
@@ -869,7 +873,14 @@ class Auth_OpenID_Message {
             $ns = null;
         } else {
             list($alias, $key) = $parts;
-            $ns = $this->namespaces->getNamespaceURI($alias);
+
+            if ($alias == 'ns') {
+              // Return the namespace URI for a namespace alias
+              // parameter.
+              return $this->namespaces->getNamespaceURI($key);
+            } else {
+              $ns = $this->namespaces->getNamespaceURI($alias);
+            }
         }
 
         if ($ns === null) {

@@ -34,6 +34,10 @@ require_once "Auth/OpenID/FileStore.php";
  */
 require_once "Auth/OpenID/SReg.php";
 
+/**
+ * Require the PAPE extension module.
+ */
+require_once "Auth/OpenID/PAPE.php";
 
 
 
@@ -114,7 +118,7 @@ class OpenIDAuthenticator extends Authenticator {
 			return false;
 		}
 
-		$SQL_identity = Convert::raw2sql($auth_request->endpoint->claimed_id);
+		/*$SQL_identity = Convert::raw2sql($auth_request->endpoint->claimed_id);
 		if(!($member = DataObject::get_one("Member",
 				   "Member.IdentityURL = '$SQL_identity'"))) {
 			if(!is_null($form)) {
@@ -128,7 +132,7 @@ class OpenIDAuthenticator extends Authenticator {
 				);
 			}
 			return false;
-		}
+		}*/
 
 
 		if($auth_request->shouldSendRedirect()) {
@@ -227,11 +231,14 @@ class OpenIDAuthenticator_Controller extends Controller {
 			Profiler::mark("OpenIDAuthenticator_Controller");
 		}
 
+		$trust_root = Director::absoluteBaseURL();
+		$return_to_url = $trust_root . 'OpenIDAuthenticator_Controller';
+
 		$consumer = new Auth_OpenID_Consumer(new OpenIDStorage(),
 																				 new SessionWrapper());
 
 		// Complete the authentication process using the server's response.
-		$response = $consumer->complete();
+		$response = $consumer->complete($return_to_url);
 
 		if($response->status == Auth_OpenID_CANCEL) {
 			Session::set("Security.Message.message",
@@ -256,7 +263,7 @@ class OpenIDAuthenticator_Controller extends Controller {
 			Director::redirect("Security/login");
 
 		} else if($response->status == Auth_OpenID_SUCCESS) {
-			$openid = $response->identity_url;
+			$openid = $response->getDisplayIdentifier();
 
 			if($response->endpoint->canonicalID) {
 				$openid = $response->endpoint->canonicalID;
@@ -289,15 +296,12 @@ class OpenIDAuthenticator_Controller extends Controller {
 
 			}	else {
 				Session::set("Security.Message.message",
-										 _t('OpenIDAuthenticator.LOGINFAILED',
-												'Login failed. Please try again.'));
+										 sprintf(_t('OpenIDAuthenticator.LOGINFAILED',
+																'Login failed (user was "%s" not found)'),
+														 $openid));
 				Session::set("Security.Message.type", "bad");
 
-				if($badLoginURL = Session::get("BadLoginURL")) {
-					Director::redirect($badLoginURL);
-				} else {
-					Director::redirectBack();
-				}
+				Director::redirect("Security/login");
 			}
 		}
 	}

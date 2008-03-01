@@ -52,11 +52,11 @@ class OpenIDLoginForm extends LoginForm {
     } else {
       if(!$fields) {
         $fields = new FieldSet(
-					new LiteralField("OpenIDDescription", 
-						_t('OpenIDLoginForm.DESC', 
+					new LiteralField("OpenIDDescription",
+						_t('OpenIDLoginForm.DESC',
 							'<div id="OpenIDDescription"><p>OpenID is an Internet-wide identity system
 		  					that allows you to sign in to many websites with a single account.
-							For more information visit <a href="http://openid.net">openid.net</a>.</p></div>
+							For more information visit <a href="http://openid.net">OpenID.net</a>.</p></div>
 						')
 					),
           new HiddenField("AuthenticationMethod", null,
@@ -110,7 +110,7 @@ class OpenIDLoginForm extends LoginForm {
 
 		// If the OpenID authenticator returns, an error occured!
 		Session::set('SessionForms.OpenIDLoginForm.OpenIDURL', $data['OpenIDURL']);
-		
+
 		if(isset($_REQUEST['BackURL']) && $backURL = $_REQUEST['BackURL']) {
 			Session::set('BackURL', $backURL);
 		}

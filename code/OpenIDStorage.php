@@ -184,7 +184,7 @@ class OpenIDStorage extends Auth_OpenID_OpenIDStore {
 	function setSQL() {
 		$this->sql['nonce_table'] =
 				"CREATE TABLE %s (\n".
-				"  server_url VARCHAR(2047),\n".
+				"  server_url BLOB,\n".
 				"  timestamp INTEGER,\n".
 				"  salt CHAR(40),\n".
 				"  UNIQUE (server_url(255), timestamp, salt)\n".
