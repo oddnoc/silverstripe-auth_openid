@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Dutch (Netherlands) language pack
+ * @package auth_openid
+ * @subpackage i18n
+ */
+
 i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Portuguese (Portugal) language pack
+ * @package auth_openid
+ * @subpackage i18n
+ */
+
 i18n::include_locale_file('auth_openid', 'en_US');
 
 global $lang;
@@ -25,12 +31,5 @@ $lang['pt_PT']['Security']['OPENIDDESC'] = '<p>Certifique-se que inseriu aqui as
 				, p.ex. com protocolo e barra para a direita para o OpenID (ex. http://openid.silverstripe.com/).</p>';
 $lang['pt_PT']['Security']['OPENIDHEADER'] = 'Credenciais OpenID/i-name';
 $lang['pt_PT']['Security']['OPENIDURL'] = 'OpenID URL/i-name';
-
-// New2
-
-$lang['pt_PT']['Security']['EDITOPENIDURL'] = 'OpenID URL/i-name (ex. http://openid.silverstripe.com/)';
-$lang['pt_PT']['Security']['OPENIDURLNORMALIZATION'] = '<p>Certifique-se que inseriu aqui as suas credenciais OpenID/i-name normalizadas 
-				, p.ex. com protocolo e barra para a direita para o OpenID (ex. http://openid.silverstripe.com/).</p>';
-
 
 ?>
