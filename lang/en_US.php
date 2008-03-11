@@ -1,9 +1,5 @@
 <?php
 
-i18n::include_locale_file('auth_openid', 'en_US');
-
-global $lang;
-
 global $lang;
 
 $lang['en_US']['Member']['BUTTONADDOPENIDTOACCOUNT'] = 'Add my OpenID to this account';
@@ -23,7 +19,7 @@ $lang['en_US']['OpenIDLoginForm']['DESC'] = '<div id="OpenIDDescription"><p>Open
 		  					that allows you to sign in to many websites with a single account.
 							For more information visit <a href="http://openid.net">OpenID.net</a>.</p>
 							<p>If you want to associate your OpenID with your existing account on this website,
-							  simple log in here with your OpenID and follow the instructions.</div>
+							  simple log in here with your OpenID and follow the instructions.</p></div>
 						';
 $lang['en_US']['OpenIDLoginForm']['URL'] = 'OpenID URL';
 
