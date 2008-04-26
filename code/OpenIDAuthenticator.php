@@ -81,7 +81,7 @@ class OpenIDAuthenticator extends Authenticator {
 	 * @todo Check if we can send the POST request for OpenID 2 directly
 	 *       (without rendering a form and using javascript)
 	 */
-	public static function authenticate(array $RAW_data, Form $form = null) {
+	public static function authenticate($RAW_data, Form $form = null) {
 		$openid = trim($RAW_data['OpenIDURL']);
 
     if(strlen($openid) == 0) {
