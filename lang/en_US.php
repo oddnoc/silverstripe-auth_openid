@@ -19,7 +19,7 @@ $lang['en_US']['OpenIDLoginForm']['DESC'] = '<div id="OpenIDDescription"><p>Open
 		  					that allows you to sign in to many websites with a single account.
 							For more information visit <a href="http://openid.net">OpenID.net</a>.</p>
 							<p>If you want to associate your OpenID with your existing account on this website,
-							  simple log in here with your OpenID and follow the instructions.</p></div>
+							  simple log in here with your OpenID and follow the instructions.</div>
 						';
 $lang['en_US']['OpenIDLoginForm']['URL'] = 'OpenID URL';
 
