@@ -10,8 +10,8 @@
  *
  * @package OpenID
  * @author JanRain, Inc. <openid@janrain.com>
- * @copyright 2005 Janrain, Inc.
- * @license http://www.gnu.org/copyleft/lesser.html LGPL
+ * @copyright 2005-2008 Janrain, Inc.
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
  */
 
 /**
@@ -28,10 +28,9 @@ require_once "Auth/OpenID.php";
  * @package OpenID
  */
 class Auth_OpenID_ServerRequest {
-    function Auth_OpenID_ServerRequest()
-    {
-        $this->mode = null;
-    }
+	function Auth_OpenID_ServerRequest()
+	{
+		$this->mode = null;
+	}
 }
 
-?>

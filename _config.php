@@ -14,14 +14,12 @@
  * but it is then vulnerable to theoretical attacks.
  * If you wish to operate in pseudorandom mode, define
  * {@link Auth_OpenID_RAND_SOURCE} to null.
- * On a Unix-like platform  (including MacOS X), try "/dev/random" and
+ * On a Unix-like platform (including MacOS X), try "/dev/random" and
  * "/dev/urandom".
  */
-define('Auth_OpenID_RAND_SOURCE', null);
+define('Auth_OpenID_RAND_SOURCE', '/dev/random');
 
 /**
  * Register the {@link OpenIDAuthenticator OpenID authenticator}
  */
 Authenticator::register_authenticator('OpenIDAuthenticator');
-
-?>

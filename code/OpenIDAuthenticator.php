@@ -1,4 +1,10 @@
 <?php
+/**
+ * code/OpenIDAuthenticator.php
+ *
+ * @package
+ */
+
 
 /**
  * OpenID authenticator and controller
@@ -7,14 +13,12 @@
  * @package OpenID
  */
 
-
-
 /**
  * Add the security folder to the include path so that the
  * {@link http://www.openidenabled.com/ PHP OpenID library} finds its files
  */
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR .
-				realpath(dirname(__FILE__)));
+	realpath(dirname(__FILE__)));
 
 
 
@@ -34,6 +38,10 @@ require_once "Auth/OpenID/FileStore.php";
  */
 require_once "Auth/OpenID/SReg.php";
 
+/**
+ * Require the PAPE extension module.
+ */
+require_once "Auth/OpenID/PAPE.php";
 
 
 
@@ -56,9 +64,8 @@ class OpenIDAuthenticator extends Authenticator {
 	 * @return bool Returns TRUE on success, FALSE otherwise.
 	 */
 	protected static function on_register() {
-		Object::add_extension('Member', 'OpenIDAuthenticatedRole');
-		Object::add_extension('Member_Validator',
-													'OpenIDAuthenticatedRole_Validator');
+		Object::add_extension( 'Member',     'OpenIDAuthenticatedRole' );
+		Object::add_extension( 'Member_Validator', 'OpenIDAuthenticatedRole_Validator' );
 		return parent::on_register();
 	}
 
@@ -66,118 +73,85 @@ class OpenIDAuthenticator extends Authenticator {
 	/**
 	 * Method to authenticate an user
 	 *
-	 * @param array $RAW_data Raw data to authenticate the user
-	 * @param Form $form Optional: If passed, better error messages can be
-	 *                             produced by using
-	 *                             {@link Form::sessionMessage()}
-	 * @return bool Returns FALSE if authentication fails, otherwise the
-	 *              method will not return at all because the browser will be
-	 *              redirected to some other server.
+	 *         produced by using
+	 *         {@link Form::sessionMessage()}
+	 *      method will not return at all because the browser will be
+	 *      redirected to some other server.
 	 *
 	 * @todo Check if we can send the POST request for OpenID 2 directly
-	 *       (without rendering a form and using javascript)
+	 *  (without rendering a form and using javascript)
+	 * @param array   $RAW_data Raw data to authenticate the user
+	 * @param object  $form     (optional) Optional: If passed, better error messages can be
+	 * @return bool Returns FALSE if authentication fails, otherwise the
 	 */
 	public static function authenticate($RAW_data, Form $form = null) {
-		$openid = trim($RAW_data['OpenIDURL']);
-
-    if(strlen($openid) == 0) {
-			if(!is_null($form)) {
+		$openid = trim( $RAW_data['OpenIDURL'] );
+		if ( strlen($openid) == 0 ) {
+			if ( !is_null($form) ) {
 				$form->sessionMessage(
-					_t('OpenIDAuthenticator.ERRORCRED',
-						 'Please enter your OpenID URL or your i-name.'),
-					'bad'
-				);
+					_t( 'OpenIDAuthenticator.ERRORCRED', 'Please enter your OpenID URL or your i-name.' ), 'bad' );
 			}
 			return false;
 		}
-
-
 		$trust_root = Director::absoluteBaseURL();
-		$return_to_url = $trust_root . 'OpenIDAuthenticator_Controller';
+		$return_to_url
+			= $trust_root . 'OpenIDAuthenticator_Controller?url=' . urlencode('/OpenIDAuthenticator_Controller');
+		$consumer = new Auth_OpenID_Consumer( new OpenIDStorage(), new SessionWrapper() );
 
-		$consumer = new Auth_OpenID_Consumer(new OpenIDStorage(),
-																				 new SessionWrapper());
-
-
-		// No auth request means we can't begin OpenID
+		# No auth request means we can't begin OpenID
 		$auth_request = $consumer->begin($openid);
-		if(!$auth_request) {
-			if(!is_null($form)) {
+		if ( !$auth_request ) {
+			if ( !is_null($form) ) {
 				$form->sessionMessage(
-					_t('OpenIDAuthenticator.ERRORNOVALID',
-						"That doesn't seem to be a valid OpenID " .
-						"or i-name identifier. Please try again."
+					_t( 'OpenIDAuthenticator.ERRORNOVALID',
+						"That doesn't seem to be a valid OpenID or i-name identifier. Please try again."
 					),
 					"bad"
 				);
 			}
 			return false;
 		}
+		if ( $auth_request->shouldSendRedirect() ) {
 
-		$SQL_identity = Convert::raw2sql($auth_request->endpoint->claimed_id);
-		if(!($member = DataObject::get_one("Member",
-				   "Member.IdentityURL = '$SQL_identity'"))) {
-			if(!is_null($form)) {
-				$form->sessionMessage(
-					_t('OpenIDAuthenticator.ERRORNOTENABLED',
-						"Either your account is not enabled for " .
-						"OpenID/i-name authentication " .
-						"or the entered identifier is wrong. " .
-						"Please try again."),
-					"bad"
-				);
+			# For OpenID 1, send a redirect.
+			$redirect_url = $auth_request->redirectURL( $trust_root, $return_to_url );
+			if ( Auth_OpenID::isFailure($redirect_url) ) {
+				displayError( "Could not redirect to server: " . $redirect_url->message );
 			}
-			return false;
-		}
-
-
-		if($auth_request->shouldSendRedirect()) {
-			// For OpenID 1, send a redirect.
-			$redirect_url = $auth_request->redirectURL($trust_root,
-																								 $return_to_url);
-
-			if(Auth_OpenID::isFailure($redirect_url)) {
-				displayError("Could not redirect to server: " .
-										 $redirect_url->message);
-			} else {
+			else {
 				Session::save();
-				header('Location: ' . $redirect_url);
+				header( 'Location: ' . $redirect_url );
 				exit();
 			}
+		}
+		else {
 
-		} else {
-			// For OpenID 2, use a javascript form to send a POST request to the
-			// server.
+			# For OpenID 2, use a javascript form to send a POST request to the
+			# server.
 			$form_id = 'openid_message';
-			$form_html = $auth_request->formMarkup($trust_root, $return_to_url,
-																						 false,
-																						 array('id' => $form_id));
+			$form_html = $auth_request->formMarkup( $trust_root, $return_to_url, false, array( 'id' => $form_id ) );
 
-			if(Auth_OpenID::isFailure($form_html)) {
-				displayError("Could not redirect to server: " .
-										 $form_html->message);
-			} else {
+			if ( Auth_OpenID::isFailure($form_html) ) {
+				displayError( "Could not redirect to server: " . $form_html->message );
+			}
+			else {
 				$page_contents = array(
-					 "<html><head><title>",
-					 _t('OpenIDAuthenticator.TRANSACTIONINPROGRESS',
-							'OpenID transaction in progress'),
-					 "</title></head>",
-					 "<body onload='document.getElementById(\"". $form_id .
-					   "\").submit()'>",
-					 $form_html,
-					 _t('OpenIDAuthenticator.TRANSACTIONNOTE',
-						"<p>Click &quot;Continue&quot; to login. You are only seeing " .
-					 	"this because you appear to have JavaScript disabled.</p>"
-					 ),
-					 "</body></html>");
-
-				print implode("\n", $page_contents);
+					"<html><head><title>",
+					_t( 'OpenIDAuthenticator.TRANSACTIONINPROGRESS', 'OpenID transaction in progress' ),
+					"</title></head>",
+					"<body onload='document.getElementById(\"" . $form_id . "\").submit()'>",
+					$form_html,
+					_t( 'OpenIDAuthenticator.TRANSACTIONNOTE',
+						"<p>Click &quot;Continue&quot; to login. You are only seeing this because you appear to have JavaScript disabled.</p>"
+					),
+					"</body></html>"
+				);
+				print implode( "\n", $page_contents );
 			}
 		}
-
 		Session::save();
 
-		// Stop the script execution! This method should return only on error
+		# Stop the script execution! This method should return only on error
 		exit();
 	}
 
@@ -186,12 +160,13 @@ class OpenIDAuthenticator extends Authenticator {
 	 * Method that creates the login form for this authentication method
 	 *
 	 * @param Controller The parent controller, necessary to create the
-	 *                   appropriate form action tag
+	 *     appropriate form action tag
+	 *      method
+	 * @param object  $controller
 	 * @return Form Returns the login form to use with this authentication
-	 *              method
 	 */
 	public static function get_login_form(Controller $controller) {
-		return Object::create("OpenIDLoginForm", $controller, "LoginForm");
+		return Object::create( "OpenIDLoginForm", $controller, "LoginForm" );
 	}
 
 
@@ -203,6 +178,8 @@ class OpenIDAuthenticator extends Authenticator {
 	public static function get_name() {
 		return "OpenID/i-name";
 	}
+
+
 }
 
 
@@ -217,87 +194,80 @@ class OpenIDAuthenticator extends Authenticator {
  */
 class OpenIDAuthenticator_Controller extends Controller {
 
+
 	/**
 	 * Run the controller (default action)
 	 *
-	 * @param array $requestParams Passed request parameters
+	 * @param array   $requestParams Passed request parameters
 	 */
 	function index($requestParams) {
-		if(isset($_GET['debug_profile'])) {
-			Profiler::mark("OpenIDAuthenticator_Controller");
+		if ( isset( $_GET['debug_profile'] ) ) { Profiler::mark("OpenIDAuthenticator_Controller"); }
+		$trust_root = Director::absoluteBaseURL();
+		$return_to_url
+			= $trust_root . 'OpenIDAuthenticator_Controller?url=' . urlencode('/OpenIDAuthenticator_Controller');
+		$consumer = new Auth_OpenID_Consumer( new OpenIDStorage(), new SessionWrapper() );
+
+		# Complete the authentication process using the server's response.
+		$response = $consumer->complete($return_to_url);
+		if ( $response->status == Auth_OpenID_CANCEL ) {
+			Session::set( "Security.Message.message",
+				_t( 'OpenIDAuthenticator.VERIFICATIONCANCELLED', 'The verification was cancelled. Please try again.' )
+			);
+			Session::set( "Security.Message.type", "bad" );
+			if ( isset( $_GET['debug_profile'] ) ) { Profiler::unmark("OpenIDAuthenticator_Controller"); }
+			Director::redirect("Security/login");
 		}
-
-		$consumer = new Auth_OpenID_Consumer(new OpenIDStorage(),
-																				 new SessionWrapper());
-
-		// Complete the authentication process using the server's response.
-		$response = $consumer->complete();
-
-		if($response->status == Auth_OpenID_CANCEL) {
-			Session::set("Security.Message.message",
-									 _t('OpenIDAuthenticator.VERIFICATIONCANCELLED',
-											'The verification was cancelled. Please try again.'));
-			Session::set("Security.Message.type", "bad");
-
-			if(isset($_GET['debug_profile']))
-				Profiler::unmark("OpenIDAuthenticator_Controller");
-
+		elseif ( $response->status == Auth_OpenID_FAILURE ) {
+			if ( Director::isDev() ) {
+				$message = $response->message;
+			}
+			else {
+				$message = _t( 'OpenIDAuthenticator.AUTHFAILED', 'The OpenID/i-name authentication failed.' );
+			}
+			Session::set( "Security.Message.message", $message );
+			Session::set( "Security.Message.type",   "bad" );
+			if ( isset( $_GET['debug_profile'] ) ) { Profiler::unmark("OpenIDAuthenticator_Controller"); }
 			Director::redirect("Security/login");
-
-		} else if($response->status == Auth_OpenID_FAILURE) {
-			Session::set("Security.Message.message", // use $response->message ??
-									 _t('OpenIDAuthenticator.AUTHFAILED',
-											'The OpenID/i-name authentication failed.'));
-			Session::set("Security.Message.type", "bad");
-
-			if(isset($_GET['debug_profile']))
-				Profiler::unmark("OpenIDAuthenticator_Controller");
-
-			Director::redirect("Security/login");
-
-		} else if($response->status == Auth_OpenID_SUCCESS) {
-			$openid = $response->identity_url;
-
-			if($response->endpoint->canonicalID) {
+		}
+		elseif ( $response->status == Auth_OpenID_SUCCESS ) {
+			$openid = $response->getDisplayIdentifier();
+			if ( $response->endpoint->canonicalID ) {
 				$openid = $response->endpoint->canonicalID;
 			}
-
-			if(isset($_GET['debug_profile']))
-				Profiler::unmark("OpenIDAuthenticator_Controller");
-
-
+			if ( isset( $_GET['debug_profile'] ) ) { Profiler::unmark("OpenIDAuthenticator_Controller"); }
 			$SQL_identity = Convert::raw2sql($openid);
-			if($member = DataObject::get_one("Member",
-				   "Member.IdentityURL = '$SQL_identity'")) {
-				$firstname = Convert::raw2xml($member->FirstName);
-				Session::set("Security.Message.message",
-										 sprintf(_t('Member.WELCOMEBACK'), $firstname));
-				Session::set("Security.Message.type", "good");
-
-				$member->LogIn(
-					Session::get('SessionForms.OpenIDLoginForm.Remember'));
-
+			if ( $member = DataObject::get_one( "Member", "Member.IdentityURL = '$SQL_identity'" ) ) {
+				$firstname = Convert::raw2xml( $member->FirstName );
+				Session::set( "Security.Message.message", sprintf( _t('Member.WELCOMEBACK'), $firstname ) );
+				Session::set( "Security.Message.type", "good" );
+				$member->LogIn( Session::get('SessionForms.OpenIDLoginForm.Remember') );
 				Session::clear('SessionForms.OpenIDLoginForm.OpenIDURL');
 				Session::clear('SessionForms.OpenIDLoginForm.Remember');
-
-				if($backURL = Session::get("BackURL")) {
+				if ( $backURL = Session::get("BackURL") ) {
 					Session::clear("BackURL");
 					Director::redirect($backURL);
-				}	else {
+				}
+				else {
 					Director::redirectBack();
 				}
-
-			}	else {
-				Session::set("Security.Message.message",
-										 _t('OpenIDAuthenticator.LOGINFAILED',
-												'Login failed. Please try again.'));
-				Session::set("Security.Message.type", "bad");
-
-				if($badLoginURL = Session::get("BadLoginURL")) {
-					Director::redirect($badLoginURL);
-				} else {
-					Director::redirectBack();
-				}
+			}
+			else {
+				$add_openid_url
+					= Director::absoluteURL('OpenIDAuthenticator_Controller/addopenidtoaccount')
+					. '?OpenID='
+					. urlencode($openid);
+				Session::set(
+					"Security.Message.message",
+					sprintf(
+						_t( 'OpenIDAuthenticator.LOGINFAILED',
+							'This OpenID (%s) is not registered to any account on this website. <a href="%s">Click here to add your OpenID to your account</a>.'
+						),
+						$openid,
+						$add_openid_url
+					)
+				);
+				Session::set( "Security.Message.type", "bad" );
+				Director::redirect("Security/login");
 			}
 		}
 	}
@@ -306,15 +276,67 @@ class OpenIDAuthenticator_Controller extends Controller {
 	/**
 	 * Helper function to set a session message for the OpenID login form
 	 *
-	 * @param string $message Message to store
-	 * @param string $type Message type (e.g. "good" or "bad")
+	 * @param string  $message Message to store
+	 * @param string  $type    Message type (e.g. "good" or "bad")
 	 */
 	function sessionMessage($message, $type) {
-		Session::set("FormInfo.OpenIDLoginForm_LoginForm.formError.message",
-								 $message);
-		Session::set("'FormInfo.OpenIDLoginForm_LoginForm.formError.type",
-								 $type);
+		Session::set( "FormInfo.OpenIDLoginForm_LoginForm.formError.message", $message );
+		Session::set( "'FormInfo.OpenIDLoginForm_LoginForm.formError.type",   $type );
 	}
+
+
+	/**
+	 * Show the "add OpenID to account" page
+	 *
+	 * @return string Returns the "add OpenID to account" page as HTML code.
+	 */
+	public function addopenidtoaccount() {
+		$tmpPage = new Page();
+		$tmpPage->Title   = _t( 'OpenIDAuthenticator.ADDOPENIDTOACCOUNTHEADER', 'Add your OpenID to your account' );
+		$tmpPage->URLSegment = 'OpenIDAuthenticator_Controller';
+		$controller    = new Page_Controller($tmpPage);
+		$controller->init();
+		if ( !isset( $_REQUEST['OpenID'] ) || ( strlen( trim( $_REQUEST['OpenID'] ) ) == 0 ) ) {
+			Session::set( "Security.Message.message",
+				_t( 'OpenIDAuthenticator.NOOPENIDPASSED', 'Login with your OpenID to add it to your account.' ) );
+			Session::set( "Security.Message.type", "bad" );
+
+			Director::redirect("Security/login");
+			return;
+		}
+		$customisedController = $controller->customise(
+			array(
+				'Content' => '<p>'
+				. _t( 'OpenIDAuthenticator.NOTEADDOPENIDTOACCOUNT',
+					'Enter your e-mail address and your password to add your OpenID to your account.' )
+				. '</p>',
+				'Form' => $this->AddOpenIDtoAccountForm(),
+			)
+		);
+		return $customisedController->renderWith("Page");
+	}
+
+
+	/**
+	 * Factory method for the add OpenID to account form
+	 *
+	 * @return Form Returns the add OpenID to account form
+	 */
+	public function AddOpenIDtoAccountForm() {
+		return new AddOpenIDtoAccountForm( $this, 'AddOpenIDtoAccountForm' );
+	}
+
+
+	/**
+	 * Get a link to a OpenIDAuthenticator_Controller action
+	 *
+	 * @param string  $action (optional) Name of the action
+	 * @return string Returns the link to the given action
+	 */
+	public static function link($action = null) {
+		return "OpenIDAuthenticator_Controller/$action";
+	}
+
 
 }
 
@@ -333,49 +355,58 @@ class SessionWrapper extends Auth_Yadis_PHPSession {
 	/**
 	 * Set a session key/value pair.
 	 *
-	 * @param string $name The name of the session key to add.
-	 * @param string $value The value to add to the session.
+	 * @param string  $name  The name of the session key to add.
+	 * @param string  $value The value to add to the session.
 	 */
 	public function set($name, $value) {
 		Session::set($name, $value);
 	}
 
 
+
+
+
 	/**
 	 * Get a key's value from the session.
 	 *
-	 * @param string $name The name of the key to retrieve.
-	 * @param string $default The optional value to return if the key
 	 * is not found in the session.
-	 * @return string $result The key's value in the session or
 	 * $default if it isn't found.
+	 *
+	 * @param string  $name    The name of the key to retrieve.
+	 * @param string  $default (optional) The optional value to return if the key
+	 * @return string $result The key's value in the session or
 	 */
 	public function get($name, $default=null) {
 		$value = Session::get($name);
-		if(is_null($value))
-			 $value = $default;
-
+		if ( is_null($value) ) { $value = $default; }
 		return $value;
 	}
+
+
+
 
 
 	/**
 	 * Remove a key/value pair from the session.
 	 *
-	 * @param string $name The name of the key to remove.
+	 * @param string  $name The name of the key to remove.
 	 */
 	public function del($name) {
 		Session::clear($name);
 	}
 
 
+
+
+
 	/**
 	 * Return the contents of the session in array form.
+	 *
+	 * @return unknown
 	 */
 	public function contents() {
 		return Session::getAll();
 	}
+
+
 }
-
-
-?>

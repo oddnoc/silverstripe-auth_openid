@@ -16,13 +16,18 @@ if(array_key_exists('pt_PT', $lang) && is_array($lang['pt_PT'])) {
 	$lang['pt_PT'] = $lang['en_US'];
 }
 
+$lang['pt_PT']['Member']['BUTTONADDOPENIDTOACCOUNT'] = 'Adicionar o meu OpenID para esta conta';
+$lang['pt_PT']['Member']['OPENIDADDEDTOACCOUNT'] = 'O seu OpenID foi adicionado à sua conta, poderá utilizá-lo para fazer login.';
+$lang['pt_PT']['OpenIDAuthenticator']['ADDOPENIDTOACCOUNTHEADER'] = 'Adicione o seu OpenID para a sua conta';
 $lang['pt_PT']['OpenIDAuthenticator']['AUTHFAILED'] = 'A autenticação do OpenID/i-name falhou.';
 $lang['pt_PT']['OpenIDAuthenticator']['ERRORCRED'] = 'Por favor ínsira o seu URL OpenID ou o seu i-name.';
-$lang['pt_PT']['OpenIDAuthenticator']['LOGINFAILED'] = 'Erro na autenticação. Por favor tente novamente.';
+$lang['pt_PT']['OpenIDAuthenticator']['LOGINFAILED'] = 'Este OpenID (%s) não está registado em nenhuma conta neste site. <a href="%s">Clique aqui para adicionar o seu OpenID à sua conta</a>.';
+$lang['pt_PT']['OpenIDAuthenticator']['NOOPENIDPASSED'] = 'Faça login com o seu OpenID para o adicionar à sua conta.';
+$lang['pt_PT']['OpenIDAuthenticator']['NOTEADDOPENIDTOACCOUNT'] = 'Introduza o seu endereço de email e a sua password para associar o seu OpenID à sua conta.';
 $lang['pt_PT']['OpenIDAuthenticator']['TRANSACTIONINPROGRESS'] = 'Transacção OpenID em progresso';
 $lang['pt_PT']['OpenIDAuthenticator']['VERIFICATIONCANCELLED'] = 'A verificação foi cancelada. Por favor tente novamente.';
 $lang['pt_PT']['OpenIDLoginForm']['DESC'] = '<div id="OpenIDDescription"><p>OpenID é um sistema de identidade na internet
-		  					que lhe permite autenticar-se em vários sites com apenas uma conta.
+							que lhe permite autenticar-se em vários sites com apenas uma conta.
 							Para mais informações visite o site <a href="http://openid.net">openid.net</a>.</p></div>
 						';
 $lang['pt_PT']['OpenIDLoginForm']['URL'] = 'OpenID URL';

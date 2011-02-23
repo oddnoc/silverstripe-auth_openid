@@ -23,6 +23,7 @@ $lang['fi_FI']['OpenIDAuthenticator']['TRANSACTIONINPROGRESS'] = 'OpenID-tapahtu
 $lang['fi_FI']['OpenIDAuthenticator']['VERIFICATIONCANCELLED'] = 'Tunnistautuminen peruutettiin. Yritä uudelleen.';
 $lang['fi_FI']['OpenIDLoginForm']['DESC'] = '<div id="OpenIDDescription"><p>OpenID on internetin laajuinen palvelu, joka antaa sinun kirjatua monille verkkosivustoille yhdellä tunnuksella. Lisätietoja saat OpenID:n <a href="http://openid.net">verkkosivustolta</a>.</p></div>';
 $lang['fi_FI']['OpenIDLoginForm']['URL'] = 'OpenID URL-osoite';
+$lang['fi_FI']['Security']['EDITOPENIDURL'] = 'OpenID URL/i-name (esim. http://openid.silverstripe.com/)';
 $lang['fi_FI']['Security']['MEMBERALREADYEXISTS'] = 'Tällä yksilöllisellä URL-osoitteella on jo rekisteröitynyt käyttäjä.';
 $lang['fi_FI']['Security']['OPENIDDESC'] = '<p>Varmista että syötät normalisoidun OpenID/i-name tunnistetietosi tänne, eli protokollan ja vinoviivan kanssa OpenID:ssä (esim. http://openid.silverstripe.com/).</p>';
 $lang['fi_FI']['Security']['OPENIDHEADER'] = 'OpenID/i-nimi tunnistetiedot';

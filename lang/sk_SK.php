@@ -22,6 +22,7 @@ $lang['sk_SK']['OpenIDAuthenticator']['LOGINFAILED'] = 'Prihlásenie zlyhalo. Pr
 $lang['sk_SK']['OpenIDAuthenticator']['TRANSACTIONINPROGRESS'] = 'Operácia OpenID sa vykonáva';
 $lang['sk_SK']['OpenIDAuthenticator']['VERIFICATIONCANCELLED'] = 'Overenie bolo zrušené. Prosím skúste to znovu.';
 $lang['sk_SK']['OpenIDLoginForm']['DESC'] = '<div id="OpenIDDescription"><p>OpenID je internetový systém identity, ktorý umožňuje prihlásenie do mnohých webových stránok pomocou jediného účtu.
+
 Pre viac informácií navštívte <a href="http://openid.net">openid.net</a>.</p></div>';
 $lang['sk_SK']['OpenIDLoginForm']['URL'] = 'OpenID URL';
 $lang['sk_SK']['Security']['MEMBERALREADYEXISTS'] = 'Už existuje člen s touto identifikačnou URL';

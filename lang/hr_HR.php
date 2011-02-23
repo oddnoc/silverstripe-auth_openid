@@ -16,13 +16,19 @@ if(array_key_exists('hr_HR', $lang) && is_array($lang['hr_HR'])) {
 	$lang['hr_HR'] = $lang['en_US'];
 }
 
+$lang['hr_HR']['Member']['BUTTONADDOPENIDTOACCOUNT'] = 'Dodaj moj OpenID ovom profilu';
+$lang['hr_HR']['Member']['OPENIDADDEDTOACCOUNT'] = 'Vaš OpenID je dodan vašem profilu i možete ga koristiti sada da i se lograli.';
+$lang['hr_HR']['OpenIDAuthenticator']['ADDOPENIDTOACCOUNTHEADER'] = 'Dodajte vaš OpenID vašem profilu';
 $lang['hr_HR']['OpenIDAuthenticator']['AUTHFAILED'] = 'OpenID/i-name autorizacije nije uspjela.';
 $lang['hr_HR']['OpenIDAuthenticator']['ERRORCRED'] = 'Molim unesite Vaš OpenID URL ili Vaš i-name.';
 $lang['hr_HR']['OpenIDAuthenticator']['LOGINFAILED'] = 'Prijava nije uspjela. Pokušajte ponovno.';
+$lang['hr_HR']['OpenIDAuthenticator']['NOOPENIDPASSED'] = 'Logirajte se OpenID-om da biste ga dodali vašem profilu.';
+$lang['hr_HR']['OpenIDAuthenticator']['NOTEADDOPENIDTOACCOUNT'] = 'Unesite vašu e-mail adresu i zaporku da biste dodali vaš OpenID vašem profilu.';
 $lang['hr_HR']['OpenIDAuthenticator']['TRANSACTIONINPROGRESS'] = 'OpenID transakcija je u tijeku';
 $lang['hr_HR']['OpenIDAuthenticator']['VERIFICATIONCANCELLED'] = 'Verifikacija je otkazana. Pokušajte ponovno.';
 $lang['hr_HR']['OpenIDLoginForm']['DESC'] = '<div id="OpenIDDescription"><p>OpenID je sustav koji Vam omogućuje korištenje jednog korisničkog računa na više web stranica. Za više informacija posjetite <a href="http://openid.net">openid.net</a>.</p></div>';
 $lang['hr_HR']['OpenIDLoginForm']['URL'] = 'OpenID URL';
+$lang['hr_HR']['Security']['EDITOPENIDURL'] = 'OpenID URL/i-ime (npr.: http://openid.silverstripe.com/)';
 $lang['hr_HR']['Security']['MEMBERALREADYEXISTS'] = 'Član sa tim URLom već postoji';
 $lang['hr_HR']['Security']['OPENIDDESC'] = '<p>Provjerite da li ste upisali normalizirane OpenID/i-name podatke, npr. sa protokolom i (/) za OpenID (npr. http://openid.silverstripe.com/).</p>';
 $lang['hr_HR']['Security']['OPENIDHEADER'] = 'OpenID/i-name podaci';
