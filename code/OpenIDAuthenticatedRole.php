@@ -79,7 +79,7 @@ class OpenIDAuthenticatedRole extends DataObjectDecorator {
 
 
 
-
+	private static $CMS_fields_need_updating = true;
 
 	/**
 	 * Change the member dialog in the CMS
@@ -90,26 +90,29 @@ class OpenIDAuthenticatedRole extends DataObjectDecorator {
 	 * @param unknown $fields (reference)
 	 */
 	function updateCMSFields(FieldSet &$fields) {
-		$fields->addFieldToTab( 'Root.OpenID',
-			new HeaderField( _t( 'Security.OPENIDHEADER', "OpenID/i-name credentials" ) ) );
-		$fields->addFieldToTab(
-			'Root.OpenID',
-			new LiteralField(
-				"OpenIDDescription",
-				_t( 'Security.OPENIDURLNORMALIZATION',
-					'<p>Make sure you enter your normalized OpenID/i-name credentials '
-					. 'here, i.e. with protocol and trailing slash for OpenID (e.g. '
-					. 'http://openid.silverstripe.com/).</p>'
+		if (self::$CMS_fields_need_updating) {
+			$fields->addFieldToTab( 'Root.OpenID',
+				new HeaderField( _t( 'Security.OPENIDHEADER', "OpenID/i-name credentials" ) ) );
+			$fields->addFieldToTab(
+				'Root.OpenID',
+				new LiteralField(
+					"OpenIDDescription",
+					_t( 'Security.OPENIDURLNORMALIZATION',
+						'<p>Make sure you enter your normalized OpenID/i-name credentials '
+						. 'here, i.e. with protocol and trailing slash for OpenID (e.g. '
+						. 'http://openid.silverstripe.com/).</p>'
+					)
 				)
-			)
-		);
-		$fields->addFieldToTab(
-			'Root.OpenID',
-			new TextField(
-				"IdentityURL",
-				_t( 'Security.EDITOPENIDURL', "OpenID URL/i-name (e.g. http://openid.silverstripe.com/)" )
-			)
-		);
+			);
+			$fields->addFieldToTab(
+				'Root.OpenID',
+				new TextField(
+					"IdentityURL",
+					_t( 'Security.EDITOPENIDURL', "OpenID URL/i-name (e.g. http://openid.silverstripe.com/)" )
+				)
+			);
+			self::$CMS_fields_need_updating = false;
+		}
 	}
 
 
